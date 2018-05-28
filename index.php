@@ -3,7 +3,7 @@
     <div class="row">
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
         <article class="post mb-4 clearfix col-12">
-            <h2 class="mb-3 text-capitalize">
+            <h2 class="mb-3 h5 text-capitalize">
                 <a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>" rel="bookmark"><?php the_title(); ?></a>
             </h2>
             <?php if ( has_post_thumbnail() ) : ?>
