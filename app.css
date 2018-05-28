@@ -7306,6 +7306,13 @@ a:hover img {
 .breadcrumb {
   font-size: .85rem; }
 
+.navbar .dropdown-menu {
+  right: 0;
+  left: auto !important; }
+
+.navbar .dropdown-item {
+  color: #212529; }
+
 .post {
   overflow: hidden; }
   .post h2 {
