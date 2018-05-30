@@ -1,43 +1,23 @@
+<?php global $razthemes; ?>
 <!doctype html>
-<html lang="en">
+<html <?php language_attributes(); ?>>
     <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta charset="<?php bloginfo( 'charset' ); ?>">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+        <link rel="profile" href="http://gmpg.org/xfn/11">
+        <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
+        <link href='<?php echo $razthemes['favicon']['url'] ?>' rel='icon' type='image/x-icon'/>
         <?php wp_head(); ?>
-
-        <style>
-            body {
-                background-color: #f4f4f4;
-            }
-            #site {
-                background-color: #fff;
-            }
-            #site-header .navbar, .widget .widget-title, .page-item.active .page-link {
-                background-color: #049eb5;
-            }
-            .page-item.active .page-link {
-                border-color: #049eb5;
-            }
-            .page-link:focus, .search-field:focus, .widget_categories select:focus {
-                z-index: 2;
-                outline: 0;
-                -webkit-box-shadow: 0 0 0 0.2rem #049eb535;
-                box-shadow: 0 0 0 0.2rem #049eb535;
-            }
-            a:link, .widget a:hover, .post h2 a:hover {
-                color: #049eb5;
-            }
-        </style>
     </head>
     <body>
         <?php if ( is_home() ) : ?>
-            <h1 class="position-absolute"><?php bloginfo( 'name' ); ?></h1>
+            <h1 class="position-absolute d-none"><?php bloginfo( 'name' ); ?></h1>
         <?php endif; ?>
+
         <header id="site-header" class="sticky-top">
             <nav class="navbar navbar-expand-md navbar-dark">
                 <div class="container">
-                    <a class="navbar-brand" href="<?php bloginfo( 'url' ); ?>"><?php bloginfo( 'name' ); ?></a>
+                    <a class="navbar-brand" href="<?php bloginfo( 'url' ); ?>"><?php echo $razthemes['title_logo']; ?></a>
                     <button class="navbar-toggler" type="button" data-toggle="offcanvas">
                     <span class="navbar-toggler-icon"></span>
                     </button>

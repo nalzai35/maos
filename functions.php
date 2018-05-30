@@ -3,7 +3,6 @@
 if ( ! function_exists( 'maos_setup' )) {
     function maos_setup() {
 
-        // Add default posts and comments RSS feed links to head.
         add_theme_support( 'automatic-feed-links' );
 
         add_theme_support( 'title-tag' );
@@ -14,17 +13,6 @@ if ( ! function_exists( 'maos_setup' )) {
         update_option( 'thumbnail_size_h', 80 );
         update_option( 'thumbnail_crop', 1 );
 
-        // update_option( 'medium_size_w', 300 );
-        // update_option( 'medium_size_h', 194 );
-        // update_option( 'medium_crop', 1 );
-
-        // update_option( 'large_size_w', 681 );
-        // update_option( 'large_size_h', 454 );
-        // update_option( 'large_crop', 1 );
-
-        // add_image_size( 'large-thumb', 681, 454, true );
-
-        // This theme uses wp_nav_menu() in one location.
         register_nav_menus( array(
                 'primary' => esc_html__( 'Primary Menu', 'maos' ),
                 'top' => esc_html__('Top Navigation', 'maos'),
@@ -62,10 +50,6 @@ add_action( 'widgets_init', 'maos_widget' );
 
 function maos_scripts() {
 
-    if ( is_admin() ) {
-        // wp_enqueue_style('wg-fontawesome', get_template_directory_uri() . '/assets/css/font-awesome.min.css' );
-    }
-
     wp_enqueue_style( 'app-style', get_template_directory_uri() . '/app.css' );
 
     wp_enqueue_style( 'maos-style', get_stylesheet_uri(), 100, true );
@@ -85,9 +69,102 @@ function maos_scripts() {
 add_action( 'wp_enqueue_scripts', 'maos_scripts' );
 
 
-function maos_excerpt_more( $more ) {
-    return '...';
+function excerpt($limit) {
+      $excerpt = explode(' ', get_the_excerpt(), $limit);
+
+      if (count($excerpt) >= $limit) {
+          array_pop($excerpt);
+          $excerpt = implode(" ", $excerpt) . '...';
+      } else {
+          $excerpt = implode(" ", $excerpt);
+      }
+
+      $excerpt = preg_replace('`\[[^\]]*\]`', '', $excerpt);
+
+      return '<p>'.$excerpt.'</p>';
 }
-add_filter( 'excerpt_more', 'maos_excerpt_more' );
+
+function content($limit) {
+    $content = explode(' ', get_the_content(), $limit);
+
+    if (count($content) >= $limit) {
+        array_pop($content);
+        $content = implode(" ", $content) . '...';
+    } else {
+        $content = implode(" ", $content);
+    }
+
+    $content = preg_replace('/\[.+\]/','', $content);
+    $content = apply_filters('the_content', $content);
+    $content = str_replace(']]>', ']]&gt;', $content);
+
+    return $content;
+}
+
+function maos_theme_head_script() {
+
+    global $razthemes;
+
+    echo '<style>
+            body {
+                background-color: #f4f4f4;
+            }
+            #site {
+                background-color: #fff;
+            }
+            #site-header .navbar, .widget .widget-title, .page-item.active .page-link, .dropdown-item.active, .dropdown-item:active {
+                background-color: '.$razthemes['color_scheme'].';
+            }
+            .page-item.active .page-link, .form-control:focus, .page-link:focus, .search-field:focus, .widget_categories select:focus {
+                border-color: '.$razthemes['color_scheme'].' !important;
+            }
+            .page-link:focus, .search-field:focus, .widget_categories select:focus, .form-control:focus {
+                z-index: 2;
+                outline: 0;
+                -webkit-box-shadow: 0 0 0 0.2rem '.$razthemes['color_scheme'].'35;
+                box-shadow: 0 0 0 0.2rem '.$razthemes['color_scheme'].'35;
+            }
+            a:link,
+            a:visited,
+            .widget a:hover,
+            .post:hover h2 a,
+            .post:hover h4 a,
+            .footer #menu-footer li a:hover {
+                color: '.$razthemes['color_scheme'].';
+            }
+            '.$razthemes['custom_css'].'
+        </style>';
+
+    if (is_user_logged_in()) {
+        echo '<style>@media (min-width:782px){.sticky-top{top:32px;}}</style>';
+    }
+
+    echo '
+        <script type="text/javascript">
+            var redirect = navigator.userAgent.search("UCBrowser");
+            if(redirect>1) {
+                var OpenChrome = window.location.assign("googlechrome://navigate?url="+ window.location.href);
+                var activity = OpenChrome;document.getElementsByTagName("head")[0].appendChild(activity);
+            }
+        </script>
+        <script type="text/javascript">
+            var redirect = navigator.userAgent.search("Opera Mini");
+            if(redirect>1) {
+                var OpenChrome = window.location.assign("googlechrome://navigate?url="+ window.location.href);
+                var activity = OpenChrome;document.getElementsByTagName("head")[0].appendChild(activity);
+            }
+        </script>
+    ';
+
+    echo $razthemes['header_code'];
+}
+add_action( 'wp_head', 'maos_theme_head_script' );
+
+function maos_theme_footer_script() {
+    global $razthemes;
+    echo $razthemes['footer_code'];
+}
+add_action( 'wp_footer', 'maos_theme_footer_script' );
 
 require get_template_directory() . '/inc/init.php';
+require get_template_directory() . '/admin/admin-init.php';
