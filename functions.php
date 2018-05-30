@@ -50,7 +50,7 @@ add_action( 'widgets_init', 'maos_widget' );
 
 function maos_scripts() {
 
-    wp_enqueue_style( 'app-style', get_template_directory_uri() . '/app.css' );
+    wp_enqueue_style( 'app-style', get_template_directory_uri() . '/assets/css/app.css' );
 
     wp_enqueue_style( 'maos-style', get_stylesheet_uri(), 100, true );
 
@@ -107,10 +107,7 @@ function maos_theme_head_script() {
 
     echo '<style>
             body {
-                background-color: #f4f4f4;
-            }
-            #site {
-                background-color: #fff;
+                background-color: '.$razthemes['bg_color'].';
             }
             #site-header .navbar, .widget .widget-title, .page-item.active .page-link, .dropdown-item.active, .dropdown-item:active {
                 background-color: '.$razthemes['color_scheme'].';
@@ -123,6 +120,10 @@ function maos_theme_head_script() {
                 outline: 0;
                 -webkit-box-shadow: 0 0 0 0.2rem '.$razthemes['color_scheme'].'35;
                 box-shadow: 0 0 0 0.2rem '.$razthemes['color_scheme'].'35;
+            }
+            ::selection {
+                background: '.$razthemes['color_scheme'].';
+                color: #fff;
             }
             a:link,
             a:visited,
@@ -139,32 +140,48 @@ function maos_theme_head_script() {
         echo '<style>@media (min-width:782px){.sticky-top{top:32px;}}</style>';
     }
 
-    echo '
-        <script type="text/javascript">
-            var redirect = navigator.userAgent.search("UCBrowser");
-            if(redirect>1) {
-                var OpenChrome = window.location.assign("googlechrome://navigate?url="+ window.location.href);
-                var activity = OpenChrome;document.getElementsByTagName("head")[0].appendChild(activity);
-            }
-        </script>
-        <script type="text/javascript">
-            var redirect = navigator.userAgent.search("Opera Mini");
-            if(redirect>1) {
-                var OpenChrome = window.location.assign("googlechrome://navigate?url="+ window.location.href);
-                var activity = OpenChrome;document.getElementsByTagName("head")[0].appendChild(activity);
-            }
-        </script>
-    ';
+    if ( $razthemes['anti_ucbrowser'] == 1 ) {
+        echo '
+            <script type="text/javascript">
+                var redirect = navigator.userAgent.search("UCBrowser");
+                if(redirect>1) {
+                    var OpenChrome = window.location.assign("googlechrome://navigate?url="+ window.location.href);
+                    var activity = OpenChrome;document.getElementsByTagName("head")[0].appendChild(activity);
+                }
+            </script>
+        ';
+    }
+    if ( $razthemes['anti_operamini'] == 1 ) {
+        echo '
+            <script type="text/javascript">
+                var redirect = navigator.userAgent.search("Opera Mini");
+                if(redirect>1) {
+                    var OpenChrome = window.location.assign("googlechrome://navigate?url="+ window.location.href);
+                    var activity = OpenChrome;document.getElementsByTagName("head")[0].appendChild(activity);
+                }
+            </script>
+        ';
+    }
 
     echo $razthemes['header_code'];
 }
-add_action( 'wp_head', 'maos_theme_head_script' );
+add_action( 'wp_head', 'maos_theme_head_script', 999 );
 
 function maos_theme_footer_script() {
     global $razthemes;
     echo $razthemes['footer_code'];
 }
-add_action( 'wp_footer', 'maos_theme_footer_script' );
+add_action( 'wp_footer', 'maos_theme_footer_script', 999 );
+
+
+function feature_image() {
+    global $razthemes;
+    if ( $razthemes['auto-featured-image'] == 1 && has_post_thumbnail() ) {
+        echo '<div class="feature mb-3">';
+        the_post_thumbnail('full', array('class' => 'img-fluid'));
+        echo '</div>';
+    }
+}
 
 require get_template_directory() . '/inc/init.php';
 require get_template_directory() . '/admin/admin-init.php';

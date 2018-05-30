@@ -22,7 +22,7 @@
         <p><?php esc_html_e( 'Sorry, no posts matched your criteria.' ); ?></p>
     <?php endif; ?>
 
-        <?php// echo ads_top(); ?>
+        <?php echo ads_bottom(); ?>
 
         <div class="col-12">
             <?php

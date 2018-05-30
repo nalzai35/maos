@@ -47,6 +47,8 @@
         </div>
     <?php endif; ?>
 
+        <?php echo ads_bottom(); ?>
+
         <div class="col-12">
             <?php
                 if ( function_exists('pagination') )

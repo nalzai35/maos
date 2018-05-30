@@ -27,9 +27,7 @@
         <p><?php esc_html_e( 'Sorry, no posts matched your criteria.' ); ?></p>
     <?php endif; ?>
 
-        <div class="col-12 text-center py-3">
-            <img src="<?php echo get_template_directory_uri().'/assets/img/336.png'; ?>" alt="">
-        </div>
+        <?php echo ads_bottom(); ?>
 
         <div class="col-12">
             <?php
